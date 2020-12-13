@@ -8,8 +8,8 @@ group = "com.github.gimme.omidbot"
 version = "1.0-SNAPSHOT"
 
 repositories {
-    mavenLocal()
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {

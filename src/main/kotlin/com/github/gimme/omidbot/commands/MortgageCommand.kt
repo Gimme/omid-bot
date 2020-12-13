@@ -12,19 +12,19 @@ class MortgageCommand : BaseCommand("mortgage") {
         rent: Double,
         durationYears: Double = 1.0,
         propertyValue: Double = 0.0,
-        loan: Double = 0.0,
-        loanInterestPercent: Double = 0.0,
-        loanAmortizationPercent: Double = 0.0,
-        stockInterestPercent: Double = 0.0,
-        propertyInterestPercent: Double = 0.0,
+        propertyReturnPercent: Double = 0.0,
+        marketReturnPercent: Double = 8.0,
+        loanPercent: Double = 85.0,
+        loanAmortizationPercent: Double = 2.0,
+        loanInterestPercent: Double = 1.5,
     ): CommandResponse {
         val durationMonths = (durationYears * 12).roundToInt()
 
-        val simulation = Simulation(stockInterestPercent / 100, propertyInterestPercent / 100)
+        val simulation = Simulation(marketReturnPercent / 100, propertyReturnPercent / 100)
 
         simulation.addRent(rent)
-        simulation.setPropertyValue(propertyValue)
-        simulation.takeLoan(loan, loanInterestPercent / 100, loanAmortizationPercent / 100)
+        simulation.buyProperty(propertyValue)
+        simulation.takeLoan((loanPercent / 100) * propertyValue, loanInterestPercent / 100, loanAmortizationPercent / 100)
         simulation.fastForward(durationMonths)
 
         val responseBody = Result(
@@ -46,8 +46,8 @@ class MortgageCommand : BaseCommand("mortgage") {
         override fun toString(): String { // TODO: display real monthly expense and theoretical money lost based on market
             return """
                 RESULT (monthly average)
-                Payment: ${averageMonthlyPayment.roundToInt()}
-                Revenue: ${averageMonthlyRevenue.roundToInt()}
+                |  Payment: ${averageMonthlyPayment.roundToInt()} (total: ${totalPayment.roundToInt()}) 
+                |  Revenue: ${averageMonthlyRevenue.roundToInt()} (total: ${totalRevenue.roundToInt()}) 
                 """.trimIndent()
         }
     }
@@ -86,6 +86,7 @@ class MortgageCommand : BaseCommand("mortgage") {
 
         private var totalPayedThisMonth = 0.0
         var propertyValue = 0.0
+        var moneyInTheBank = 0.0
 
         fun fastForward(months: Int) {
             ghostSavings += (propertyValue - loans.sumOf(Loan::debt)).coerceAtLeast(0.0)
@@ -112,6 +113,7 @@ class MortgageCommand : BaseCommand("mortgage") {
 
             ghostSavings += totalPayedThisMonth - payedAtTheBeginningOfMonth
             totalPayed += totalPayedThisMonth
+            moneyInTheBank -= totalPayedThisMonth
         }
 
         private fun resetMonth() {
@@ -141,15 +143,17 @@ class MortgageCommand : BaseCommand("mortgage") {
         }
 
         fun takeLoan(amount: Number, interestRate: Double, amortizationRate: Double): Simulation {
+            moneyInTheBank += amount.toDouble()
             loans.add(Loan(amount.toDouble(), interestRate, amortizationRate))
             return this
         }
 
-        fun setPropertyValue(propertyValue: Double): Simulation {
-            this.propertyValue = propertyValue
+        fun buyProperty(propertyValue: Double): Simulation {
+            moneyInTheBank -= propertyValue
+            this.propertyValue += propertyValue
             return this
         }
 
-        fun getTotalRevenue(): Double = -ghostSavings + totalAmortized// TODO + propertyValue - loans.sumOf(Loan::debt)
+        fun getTotalRevenue(): Double = -(ghostSavings - totalPayed) + moneyInTheBank + propertyValue - loans.sumOf(Loan::debt)
     }
 }

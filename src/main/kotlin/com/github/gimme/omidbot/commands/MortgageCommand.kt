@@ -9,8 +9,8 @@ import kotlin.math.roundToInt
 class MortgageCommand : BaseCommand("mortgage") {
     @CommandExecutor
     fun execute(
-        rent: Double,
-        durationYears: Double = 1.0,
+        durationYears: Double = 0.0,
+        rent: Double = 0.0,
         propertyValue: Double = 0.0,
         propertyReturnPercent: Double = 0.0,
         marketReturnPercent: Double = 8.0,
@@ -45,7 +45,7 @@ class MortgageCommand : BaseCommand("mortgage") {
     ) {
         override fun toString(): String { // TODO: display real monthly expense and theoretical money lost based on market
             return """
-                RESULT (monthly average)
+                RESULT - Monthly average (does not account for taxes):
                 |  Payment: ${averageMonthlyPayment.roundToInt()} (total: ${totalPayment.roundToInt()}) 
                 |  Revenue: ${averageMonthlyRevenue.roundToInt()} (total: ${totalRevenue.roundToInt()}) 
                 """.trimIndent()

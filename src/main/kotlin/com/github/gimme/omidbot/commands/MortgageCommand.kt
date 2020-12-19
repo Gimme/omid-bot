@@ -6,7 +6,11 @@ import com.github.gimme.gimmebot.core.command.executor.CommandExecutor
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
+private const val USAGE = "mortgage <durationYears> <rent> <propertyValue=0> <propertyReturnPercent=0>" +
+        " <marketReturnPercent=8> <loanPercent=85> <loanAmortizationPercent=2> <loanInterestPercent=1.5>"
+
 class MortgageCommand : BaseCommand("mortgage") {
+
     @CommandExecutor
     fun execute(
         durationYears: Double = 0.0,
@@ -24,7 +28,9 @@ class MortgageCommand : BaseCommand("mortgage") {
 
         simulation.addRent(rent)
         simulation.buyProperty(propertyValue)
-        simulation.takeLoan((loanPercent / 100) * propertyValue, loanInterestPercent / 100, loanAmortizationPercent / 100)
+        simulation.takeLoan((loanPercent / 100) * propertyValue,
+            loanInterestPercent / 100,
+            loanAmortizationPercent / 100)
         simulation.fastForward(durationMonths)
 
         val responseBody = Result(
@@ -35,6 +41,16 @@ class MortgageCommand : BaseCommand("mortgage") {
         )
 
         return CommandResponse(responseBody.toString(), responseBody)
+    }
+
+    /**
+     * Returns how to use the command.
+     *
+     * This is a temporary override before default values are fully supported. It can be removed when the default
+     * implementation shows default values.
+     */
+    override fun getUsage(): String {
+        return USAGE
     }
 
     internal data class Result(
@@ -154,6 +170,7 @@ class MortgageCommand : BaseCommand("mortgage") {
             return this
         }
 
-        fun getTotalRevenue(): Double = -(ghostSavings - totalPayed) + moneyInTheBank + propertyValue - loans.sumOf(Loan::debt)
+        fun getTotalRevenue(): Double =
+            -(ghostSavings - totalPayed) + moneyInTheBank + propertyValue - loans.sumOf(Loan::debt)
     }
 }

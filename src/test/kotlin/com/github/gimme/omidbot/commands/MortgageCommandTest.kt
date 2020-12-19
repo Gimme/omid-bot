@@ -38,7 +38,7 @@ class MortgageCommandTest {
 
             // Investment Loss
 
-            Input(0, loanPercent = 1000000, loanInterestPercent = 0, expectedRevenue = 0),
+            Input(0, 1.00, 1000000, 0, 0, 100,  12, 0, expectedRevenue = 0),
             Input(0, 0.08, 1000000, 0, 10, 100, 12, 12, expectedRevenue = -10000),
             Input(0, 0.17, 1000000, 0, 10, 100, 12, 0, expectedRevenue = -79.7414),
 

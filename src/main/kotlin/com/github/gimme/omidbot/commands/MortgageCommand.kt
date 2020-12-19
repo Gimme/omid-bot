@@ -13,8 +13,8 @@ class MortgageCommand : BaseCommand("mortgage") {
 
     @CommandExecutor
     fun execute(
-        durationYears: Double = 0.0,
-        rent: Double = 0.0,
+        durationYears: Double,
+        rent: Double,
         propertyValue: Double = 0.0,
         propertyReturnPercent: Double = 0.0,
         marketReturnPercent: Double = 8.0,

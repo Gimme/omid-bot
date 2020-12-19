@@ -52,8 +52,8 @@ class MortgageCommandTest {
     }
 
     data class Input(
-        val rent: Number = 0,
-        val durationYears: Number = 0,
+        val rent: Number,
+        val durationYears: Number,
         val propertyValue: Number = 0,
         val propertyReturnPercent: Number = 0,
         val marketReturnPercent: Number = 8,
@@ -97,8 +97,8 @@ class MortgageCommandTest {
 
     @Test
     fun `test input should have same defaults as command`() {
-        val data1 = Input(0)
-        assertEquals(command.execute(rent = 0.0),
+        val data1 = Input(0, 0)
+        assertEquals(command.execute(0.0, 0.0),
             command.execute(
                 data1.durationYears.toDouble(),
                 data1.rent.toDouble(),
@@ -110,8 +110,8 @@ class MortgageCommandTest {
                 data1.loanInterestPercent.toDouble(),
             ))
 
-        val data2 = Input(100, loanPercent = 1000)
-        assertEquals(command.execute(100.0, loanPercent = 1000.0),
+        val data2 = Input(100, 1, loanPercent = 1000)
+        assertEquals(command.execute(1.0, 100.0, loanPercent = 1000.0),
             command.execute(
                 data2.durationYears.toDouble(),
                 data2.rent.toDouble(),

@@ -6,12 +6,9 @@ import com.github.gimme.gimmebot.core.command.executor.CommandExecutor
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-private const val USAGE = "mortgage <duration-years> <rent> <property-value=0> <property-return-percent=0>" +
-        " <market-return-percent=8> <loan-percent=85> <loan-amortization-percent=2> <loan-interest-percent=1.5>"
-
 class MortgageCommand : BaseCommand("mortgage") {
 
-    @CommandExecutor
+    @CommandExecutor("", "", "0", "0", "8", "85", "2", "1.5")
     fun execute(
         durationYears: Double,
         rent: Double,
@@ -163,13 +160,4 @@ class MortgageCommand : BaseCommand("mortgage") {
         fun getTotalRevenue(): Double =
             -(ghostSavings - totalPayed) + moneyInTheBank + propertyValue - loans.sumOf(Loan::debt)
     }
-
-    /**
-     * Returns how to use the command.
-     *
-     * This is a temporary override before default values are fully supported. It can be removed when the default
-     * implementation shows default values.
-     */
-    override val usage: String
-        get() = USAGE
 }

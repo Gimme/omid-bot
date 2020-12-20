@@ -6,8 +6,8 @@ import com.github.gimme.gimmebot.core.command.executor.CommandExecutor
 import kotlin.math.pow
 import kotlin.math.roundToInt
 
-private const val USAGE = "mortgage <durationYears> <rent> <propertyValue=0> <propertyReturnPercent=0>" +
-        " <marketReturnPercent=8> <loanPercent=85> <loanAmortizationPercent=2> <loanInterestPercent=1.5>"
+private const val USAGE = "mortgage <duration-years> <rent> <property-value=0> <property-return-percent=0>" +
+        " <market-return-percent=8> <loan-percent=85> <loan-amortization-percent=2> <loan-interest-percent=1.5>"
 
 class MortgageCommand : BaseCommand("mortgage") {
 

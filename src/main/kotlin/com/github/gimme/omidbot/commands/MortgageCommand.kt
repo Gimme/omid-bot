@@ -43,16 +43,6 @@ class MortgageCommand : BaseCommand("mortgage") {
         return CommandResponse(responseBody.toString(), responseBody)
     }
 
-    /**
-     * Returns how to use the command.
-     *
-     * This is a temporary override before default values are fully supported. It can be removed when the default
-     * implementation shows default values.
-     */
-    override fun getUsage(): String {
-        return USAGE
-    }
-
     internal data class Result(
         val totalPayment: Double,
         val averageMonthlyPayment: Double,
@@ -173,4 +163,13 @@ class MortgageCommand : BaseCommand("mortgage") {
         fun getTotalRevenue(): Double =
             -(ghostSavings - totalPayed) + moneyInTheBank + propertyValue - loans.sumOf(Loan::debt)
     }
+
+    /**
+     * Returns how to use the command.
+     *
+     * This is a temporary override before default values are fully supported. It can be removed when the default
+     * implementation shows default values.
+     */
+    override val usage: String
+        get() = USAGE
 }

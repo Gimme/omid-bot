@@ -2,7 +2,7 @@ package com.github.gimme.omidbot
 
 import kotlin.math.pow
 
-class Simulation(stockInterest: Double, propertyInterest: Double) {
+class Simulation(startingBalance: Double, stockInterest: Double, propertyInterest: Double) {
     private val loans: MutableList<Loan> = mutableListOf()
 
     var rent = 0.0
@@ -17,7 +17,7 @@ class Simulation(stockInterest: Double, propertyInterest: Double) {
 
     private var totalPayedThisMonth = 0.0
     var propertyValue = 0.0
-    var moneyInTheBank = 0.0
+    var moneyInTheBank = startingBalance
 
     fun fastForward(months: Int) {
         ghostSavings += (propertyValue - loans.sumOf(Loan::debt)).coerceAtLeast(0.0)

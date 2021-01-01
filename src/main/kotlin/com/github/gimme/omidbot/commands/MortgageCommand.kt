@@ -29,14 +29,12 @@ class MortgageCommand : BaseCommand<MortgageCommand.Result>("mortgage") {
             loanAmortizationPercent / 100)
         simulation.fastForward(durationMonths)
 
-        val responseBody = Result(
+        return Result(
             simulation.totalPayed,
             if (durationMonths == 0) 0.0 else simulation.totalPayed / durationMonths,
             simulation.getTotalRevenue(),
             if (durationMonths == 0) 0.0 else simulation.getTotalRevenue() / durationMonths,
         )
-
-        return responseBody
     }
 
     data class Result(

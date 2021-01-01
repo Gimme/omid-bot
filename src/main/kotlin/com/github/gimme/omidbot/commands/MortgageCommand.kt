@@ -21,13 +21,10 @@ class MortgageCommand : BaseCommand<MortgageCommand.Result>("mortgage") {
         val durationMonths = (durationYears * 12).roundToInt()
 
         val simulation = Simulation(0.0, marketReturnPercent / 100, propertyReturnPercent / 100)
-
-        simulation.addRent(rent)
-        simulation.buyProperty(propertyValue)
-        simulation.takeLoan((loanPercent / 100) * propertyValue,
-            loanInterestPercent / 100,
-            loanAmortizationPercent / 100)
-        simulation.fastForward(durationMonths)
+            .addRent(rent)
+            .buyProperty(propertyValue)
+            .takeLoan((loanPercent / 100) * propertyValue, loanInterestPercent / 100, loanAmortizationPercent / 100)
+            .fastForward(durationMonths)
 
         return Result(
             simulation.totalPayed,

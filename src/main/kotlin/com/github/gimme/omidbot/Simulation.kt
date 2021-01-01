@@ -2,7 +2,7 @@ package com.github.gimme.omidbot
 
 import kotlin.math.pow
 
-class Simulation(startingBalance: Double, stockInterest: Double, propertyInterest: Double) {
+class Simulation(startingBalance: Double, stockInterest: Double = 0.0, propertyInterest: Double = 0.0) {
     private val loans: MutableList<Loan> = mutableListOf()
 
     var rent = 0.0

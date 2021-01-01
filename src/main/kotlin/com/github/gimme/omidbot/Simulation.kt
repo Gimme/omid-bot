@@ -5,6 +5,7 @@ import kotlin.math.pow
 class Simulation(startingBalance: Double, stockInterest: Double = 0.0, propertyInterest: Double = 0.0) {
     private val loans: MutableList<Loan> = mutableListOf()
 
+    var monthlyIncome = 0.0
     var rent = 0.0
     var stockInterestMonthly = (1 + stockInterest).pow(1 / 12.0) - 1
     var propertyInterestMonthly = (1 + propertyInterest).pow(1 / 12.0) - 1
@@ -14,6 +15,7 @@ class Simulation(startingBalance: Double, stockInterest: Double = 0.0, propertyI
         private set
     var ghostSavings = 0.0 // Money that could have been saved instead of paying off the property
         private set
+    var investMoneyInTheBank = false
 
     private var totalPayedThisMonth = 0.0
     var propertyValue = 0.0
@@ -39,6 +41,9 @@ class Simulation(startingBalance: Double, stockInterest: Double = 0.0, propertyI
 
         ghostSavings *= 1 + stockInterestMonthly
         propertyValue *= 1 + propertyInterestMonthly
+        if (investMoneyInTheBank) {
+            moneyInTheBank *= 1 + stockInterestMonthly
+        }
 
         payLoanRates()
         amortizeLoans()
@@ -46,6 +51,7 @@ class Simulation(startingBalance: Double, stockInterest: Double = 0.0, propertyI
         ghostSavings += totalPayedThisMonth - payedAtTheBeginningOfMonth
         totalPayed += totalPayedThisMonth
         moneyInTheBank -= totalPayedThisMonth
+        moneyInTheBank += monthlyIncome
     }
 
     private fun resetMonth() {
@@ -68,6 +74,11 @@ class Simulation(startingBalance: Double, stockInterest: Double = 0.0, propertyI
             totalPayedThisMonth += amortized
             totalAmortized += amortized
         }
+    }
+
+    fun addIncome(monthlyIncome: Double): Simulation {
+        this.monthlyIncome += monthlyIncome
+        return this
     }
 
     fun addRent(rent: Double): Simulation {

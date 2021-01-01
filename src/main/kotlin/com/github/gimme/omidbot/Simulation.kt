@@ -19,9 +19,10 @@ class Simulation(startingBalance: Double, stockInterest: Double, propertyInteres
     var propertyValue = 0.0
     var moneyInTheBank = startingBalance
 
-    fun fastForward(months: Int) {
+    fun fastForward(months: Int): Simulation {
         ghostSavings += (propertyValue - loans.sumOf(Loan::debt)).coerceAtLeast(0.0)
         repeat(months) { doMonth() }
+        return this
     }
 
     private fun doMonth() {
@@ -69,8 +70,9 @@ class Simulation(startingBalance: Double, stockInterest: Double, propertyInteres
         }
     }
 
-    fun addRent(rent: Double) {
+    fun addRent(rent: Double): Simulation {
         this.rent += rent
+        return this
     }
 
     fun takeLoan(amount: Number, interestRate: Double, amortizationRate: Double): Simulation {

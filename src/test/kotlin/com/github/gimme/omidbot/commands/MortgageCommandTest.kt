@@ -67,7 +67,7 @@ class MortgageCommandTest {
     @ParameterizedTest
     @MethodSource("inputProvider")
     fun `should calculate mortgage costs`(data: Input) {
-        val body = command.execute(
+        val result = command.execute(
             data.durationYears.toDouble(),
             data.rent.toDouble(),
             data.propertyValue.toDouble(),
@@ -76,18 +76,18 @@ class MortgageCommandTest {
             data.loanPercent.toDouble(),
             data.loanAmortizationPercent.toDouble(),
             data.loanInterestPercent.toDouble(),
-        ).body as MortgageCommand.Result
+        )
 
         assert(data.expectedPayment != null || data.expectedRevenue != null)
 
         val delta = 0.0001
-        data.expectedPayment?.let { assertEquals(it.toDouble(), body.totalPayment, delta) }
-        data.expectedRevenue?.let { assertEquals(it.toDouble(), body.totalRevenue, delta) }
+        data.expectedPayment?.let { assertEquals(it.toDouble(), result.totalPayment, delta) }
+        data.expectedRevenue?.let { assertEquals(it.toDouble(), result.totalRevenue, delta) }
     }
 
     @Test
     fun `given total cost should calculate average monthly cost`() {
-        val result = command.execute(1.0, 1000.0, marketReturnPercent = 0.0).body as MortgageCommand.Result
+        val result = command.execute(1.0, 1000.0, marketReturnPercent = 0.0)
 
         assertEquals(12000.0, result.totalPayment)
         assertEquals(-12000.0, result.totalRevenue)

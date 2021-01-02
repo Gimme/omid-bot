@@ -29,3 +29,17 @@ tasks.test {
 tasks.withType<KotlinCompile>() {
     kotlinOptions.jvmTarget = "13"
 }
+
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = "com.github.gimme.omidbot.MainKt"
+    }
+
+    // Add all of the dependencies, otherwise we get a "NoClassDefFoundError" error
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
+}
